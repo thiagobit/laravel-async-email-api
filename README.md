@@ -146,12 +146,17 @@ composer install
 php artisan migrate
 ```
 
-5. Start application:
+5. Generate application key:
+```
+php artisan key:generate
+```
+
+6. Start application:
 ```
 php artisan serve
 ```
 
-6. Start Horizon (access: `[APP_URL]`/horizon):
+7. Start Horizon (access: `[APP_URL]`/horizon):
 ```
 php artisan horizon
 ```
