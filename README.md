@@ -11,7 +11,7 @@ An API done in Laravel 8.29.0 for sending asynchronous emails.
 The API works with JWT authentication.
 Token needs to be sent in `api_token` parameter.
 
-## Methods
+## Resources
 
 ### api/list
 - Endpoint: http://localhost:8080/api/list
@@ -137,12 +137,12 @@ Token needs to be sent in `api_token` parameter.
 ## Installation
 1. Clone this repository:
 ```shell
-git clone git@github.com:thiagobit/async-email-api.git
+git clone git@github.com:thiagobit/laravel-async-email-api.git
 ```
 
 2. Create .env file:
 ```shell
-cp .env_example .env
+cp .env.example .env
 ```
 
 3. Run docker-compose:
