@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+    php:
+        container_name: laravel-async-email-api_php
+        image: php:8-fpm-alpine
+        ports:
+            - "8080:8000"
+        volumes:
+            - .:/var/www/html
+        links:
+            - mysql
+            - redis
+        command: sh -c "
+            apk update &&
+            apk upgrade &&
+            apk add autoconf gcc g++ make &&
+            pecl install -o -f redis &&
+            rm -rf /tmp/pear &&
+            docker-php-ext-enable redis &&
+            docker-php-ext-install pdo_mysql pcntl &&
+            php artisan key:generate &&
+            php artisan migrate &&
+            nohup php artisan horizon &>/dev/null &
+            php artisan serve --host 0.0.0.0"
+
+    mysql:
+        container_name: laravel-async-email-api_mysql
+        image: mysql:5.7
+        ports:
+            - "3307:3306"
+        environment:
+            - MYSQL_DATABASE=laravel_async_email_api
+            - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    redis:
+        container_name: laravel-async-email-api_redis
+        image: redis:6-alpine
+        ports:
+            - '6380:6379'
+
+    composer:
+        container_name: laravel-async-email-api_composer
+        image: composer
+        volumes:
+            - ./:/app
+        command: install --ignore-platform-reqs

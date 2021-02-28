@@ -70,8 +70,6 @@ class EmailController extends Controller
                     ]);
                 }
             }
-
-            //if ($attachments) EmailAttachment::create(['email_id' => $iEmail->id, ...$attachments]);
         }
     }
 }
