@@ -53,7 +53,7 @@ function rawEmail($withAttachments = true, $attributes = []) : array
 function rawEmailAttachment($attributes = []) : array
 {
     $fileName = (isset($attributes['name'])) ? $attributes['name'] : 'test.jpg';
-    $fileBase64 = (isset($attributes['file'])) ? base64_encode($attributes['file']) : base64_encode(Storage::disk('local')->get($fileName));
+    $fileBase64 = (isset($attributes['file'])) ? base64_encode($attributes['file']) : base64_encode(Storage::disk('local/tests')->get($fileName));
 
     return ['attachments' => [['name' => $fileName, 'file' => $fileBase64]]];
 }
