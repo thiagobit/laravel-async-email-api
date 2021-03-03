@@ -3,19 +3,17 @@
 An API done in Laravel 8.29.0 for sending asynchronous emails.
 
 ## Requirements
-- PHP ^7.3
-- MySQL ^5.5
-- Redis
-- Composer
+- [Docker](https://docs.docker.com/engine/install/).
+- [Docker Compose](https://docs.docker.com/compose/install/).
 
 ## Authentication
 
-The API works with JWT authentication.
-Token needs to be sent in `api_token` parameter.
+The API works with JWT authentication. Token needs to be sent in `api_token` parameter.
 
 ## Resources
 
 ### api/list
+- Endpoint: http://localhost:8000/api/list
 - Description: List all sent emails with downloadable attachments.
 - Method: `GET`
 - Needs Authentication: `true`
@@ -46,7 +44,7 @@ Token needs to be sent in `api_token` parameter.
             "url": "http://127.0.0.1:8000/storage/foo.jpg"
           },
           {
-            "url": "http://127.0.0.1:8000/storage/bar.jpeg"
+            "url": "http://127.0.0.1:8000/storage/bar.png"
           },
         ]
       },
@@ -60,6 +58,7 @@ Token needs to be sent in `api_token` parameter.
     ```
 
 ### api/send
+- Endpoint: http://localhost:8000/api/send
 - Description: Send email to the queue.
 - Method: `POST`
 - Needs Authentication: `true`
@@ -130,7 +129,7 @@ Token needs to be sent in `api_token` parameter.
   ```
   
 ---
-#### P.S.: Do not forget to add `Accept: application/json` in the `Header` of your requisitions.
+#### P.S.: Do not forget to add `Accept: application/json` and `Content-Type: application/json` in the `Header` of your requisitions.
 
 ---
 
@@ -140,47 +139,45 @@ Token needs to be sent in `api_token` parameter.
 git clone git@github.com:thiagobit/laravel-async-email-api.git
 ```
 
-2. Create .env file and change it according to your environment:
+2. Create .env file:
 ```shell
 cp .env.example .env
 ```
 
-3. Install dependencies:
+3. Run docker-compose:
 ```shell
-composer install
+docker-compose up
 ```
 
-4. Generate application key:
-```shell
-php artisan key:generate
-
-``` 
-
-5. Run migrations:
-```shell
-php artisan migrate
-``` 
-
-6. Start application:
-```shell
-php artisan serve
-``` 
-
-7. Start Horizon:
-```shell
-php artisan horizon
-```
+## Access
+- Horizon: http://localhost:8000/horizon
+- MySQL: `docker exec -it laravel-async-email-api_mysql mysql -uroot`
+- Redis: `docker exec -it laravel-async-email-api_redis redis-cli`
 
 ## Extra
 - Creating API Users:
   1. Run Tinker:
     ```shell
-    php artisan tinker
+    docker exec -it laravel-async-email-api_php php artisan tinker
     ```
   
   2. Inside Tinker, create how many users you want:
     ```
     User::factory()->count(1)->create();
     ```
-  
-- For email test I recomment [Mailtrap](https://mailtrap.io/), it's really easy to use and configure.
+- Restarting Horizon:
+  1. Kill Horizon current process:
+    ```shell
+    docker exec laravel-async-email-api_php pkill -f horizon
+    ```
+
+  2. Launch Horizon again:
+    ```shell
+    docker exec -it laravel-async-email-api_php php artisan horizon
+    ```
+
+- Running tests:
+  ```shell
+  docker exec -t laravel-async-email-api_php vendor/bin/phpunit
+  ```
+- For email test I recommend [Mailtrap](https://mailtrap.io/), it's really easy to use and configure.
